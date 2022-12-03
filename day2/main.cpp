@@ -42,16 +42,50 @@ Outcome play(Play opp, Play user) {
   }
 }
 
-Play parse(QChar in, int offset) {
+Play choose(Play opp, Outcome desired) {
+  switch (desired) {
+  case lost:
+    switch (opp) {
+    case rock:
+      return scissors;
+    case paper:
+      return rock;
+    case scissors:
+      return paper;
+    }
+  case won:
+    switch (opp) {
+    case rock:
+      return paper;
+    case paper:
+      return scissors;
+    case scissors:
+      return rock;
+    }
+  case draw:
+    return opp;
+  }
+}
+
+Play parsePlay(QChar in, int offset) {
   switch (in.unicode() - offset) {
   case 0:
     return rock;
   case 1:
     return paper;
-    break;
   case 2:
     return scissors;
-    break;
+  }
+}
+
+Outcome parseOutcome(QChar in, int offset) {
+  switch (in.unicode() - offset) {
+  case 0:
+    return lost;
+  case 1:
+    return draw;
+  case 2:
+    return won;
   }
 }
 
@@ -72,9 +106,9 @@ int main(int argc, char *argv[])
       continue;
     }
 
-    auto opp = parse(line[0], 'A');
-    auto player = parse(line[2], 'X');
-    auto outcome = play(opp, player);
+    auto opp = parsePlay(line[0], 'A');
+    auto outcome = parseOutcome(line[2], 'X');
+    auto player = choose(opp, outcome);
 
     score += outcome + player;
   }
