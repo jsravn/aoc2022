@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 {
   auto lines = parseIn("../../aoc2022/day4/in.txt");
 
-  auto overlaps = 0;
+  auto contains = 0, overlaps = 0;
   for (const auto &line : lines) {
     if (line.empty()) {
       continue;
@@ -40,14 +40,16 @@ int main(int argc, char *argv[])
     });
 
     cout << line << endl;
-    if (ranges[1].first <= ranges[0].second && ranges[1].second <= ranges[0].second) {
+    if (ranges[1].first <= ranges[0].second) {
       overlaps += 1;
-      cout << "overlaps!" << endl;
-    } else {
-      cout << "no overlap!" << endl;
+      if (ranges[1].second <= ranges[0].second) {
+        contains += 1;
+      }
     }
   }
 
-  cout << "part1: " << overlaps << endl;
+  cout << "part1: " << contains << endl;
+  cout << "part2: " << overlaps << endl;
+
   return 0;
 }
